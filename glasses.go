@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	hostname     string
-	matchPattern = "map[kubernetes.io/ingress.class:traefik]"
+	k8sHostname   string
+	matchPattern  = "map[kubernetes.io/ingress.class:traefik]"
 )
 
 func homeDir() string {
@@ -37,12 +37,13 @@ func k8sHost(config *rest.Config) string {
 
 func main() {
 
+	fmt.Println("# reading k8s config...")
 	config, err := clientcmd.BuildConfigFromFlags("", filepath.Join(homeDir(), ".kube", "config"))
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
 
-	hostname = k8sHost(config)
+	k8sHostname = k8sHost(config)
 
 	client, err := kubernetes.NewForConfig(config)
 	if err != nil {
@@ -54,14 +55,18 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 
+	var hostEntries string
+
 	for _, elem := range ingress.Items {
 		for _, annotation := range elem.Annotations {
 			if annotation == matchPattern {
 				for _, rule := range elem.Spec.Rules {
-					fmt.Println(hostname, rule.Host, "#", elem.Name)
+					hostEntries = hostEntries + fmt.Sprintf("%s %s # %s\n", k8sHostname, rule.Host, elem.Name)
 				}
 			}
 		}
 	}
+
+	fmt.Println(hostEntries)
 
 }
