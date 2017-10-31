@@ -20,6 +20,7 @@ var (
 	k8sHostname   string
 	matchPattern  = "map[kubernetes.io/ingress.class:traefik]"
 	hostFile      = flag.String("host-file", "/etc/hosts", "host file location")
+	writeHostFile = flag.Bool("write", false, "rewrite host file?")
 )
 
 const (
@@ -75,6 +76,11 @@ func main() {
 				}
 			}
 		}
+	}
+
+	if !*writeHostFile {
+		fmt.Println(hostEntries)
+		os.Exit(0)
 	}
 
 	block := []byte(fmt.Sprintf("%s\n%s\n%s\n", sectionStart, hostEntries, sectionEnd))
