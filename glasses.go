@@ -59,7 +59,7 @@ func k8sHost(config *rest.Config) string {
 
 func tryWriteToHostFile(hostEntries string) error {
 
-	block := []byte(fmt.Sprintf("%s\n%s\n%s\n", sectionStart, hostEntries, sectionEnd))
+	block := []byte(fmt.Sprintf("%s\n%s\n%s", sectionStart, hostEntries, sectionEnd))
 	fileContent, err := ioutil.ReadFile(*hostFile)
 	if err != nil {
 		return err
