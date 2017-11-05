@@ -36,6 +36,18 @@ func homeDir() string {
 	return os.Getenv("USERPROFILE")
 }
 
+type Rule struct {
+	Domain  string
+	Service string
+}
+
+func (r *Rule) String() string {
+
+	return fmt.Sprintf("%s %s # %s", k8sHostname, r.Domain, r.Service)
+}
+
+type HostsList []Rule
+
 func k8sHost(config *rest.Config) string {
 	u, err := url.Parse(config.Host)
 	if err != nil {
@@ -66,16 +78,23 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 
-	var hostEntries string
-
+	var entries HostsList
 	for _, elem := range ingress.Items {
 		for _, annotation := range elem.Annotations {
 			if annotation == matchPattern {
 				for _, rule := range elem.Spec.Rules {
-					hostEntries = hostEntries + fmt.Sprintf("%s %s # %s\n", k8sHostname, rule.Host, elem.Name)
+					entries = append(entries, Rule{
+						Domain:  rule.Host,
+						Service: elem.Name,
+					})
 				}
 			}
 		}
+	}
+
+	var hostEntries string
+	for _, item := range entries {
+		hostEntries = hostEntries + fmt.Sprintf("%s\n", item.String())
 	}
 
 	if !*writeHostFile {
