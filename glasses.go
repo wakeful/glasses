@@ -21,11 +21,13 @@ var (
 	matchPattern  = "map[kubernetes.io/ingress.class:traefik]"
 	hostFile      = flag.String("host-file", "/etc/hosts", "host file location")
 	writeHostFile = flag.Bool("write", false, "rewrite host file?")
+	showVersion   = flag.Bool("version", false, "show version and exit")
 )
 
 const (
 	sectionStart = "# generated using glasses start #"
 	sectionEnd   = "# generated using glasses end #"
+	version      = "0.1"
 )
 
 func homeDir() string {
@@ -82,6 +84,11 @@ func tryWriteToHostFile(hostEntries string) error {
 
 func main() {
 	flag.Parse()
+
+	if *showVersion {
+		fmt.Printf("Glasses version: %s", version)
+		os.Exit(2)
+	}
 
 	fmt.Println("# reading k8s config...")
 	config, err := clientcmd.BuildConfigFromFlags("", filepath.Join(homeDir(), ".kube", "config"))
