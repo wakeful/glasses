@@ -57,6 +57,29 @@ func k8sHost(config *rest.Config) string {
 	return u.Hostname()
 }
 
+func tryWriteToHostFile(hostEntries string) error {
+
+	block := []byte(fmt.Sprintf("%s\n%s\n%s\n", sectionStart, hostEntries, sectionEnd))
+	fileContent, err := ioutil.ReadFile(*hostFile)
+	if err != nil {
+		return err
+	}
+
+	re := regexp.MustCompile(fmt.Sprintf("(?ms)%s(.*)%s", sectionStart, sectionEnd))
+	if re.Match(fileContent) {
+		fileContent = re.ReplaceAll(fileContent, block)
+	} else {
+		fileContent = append(fileContent, block...)
+	}
+
+	if err := ioutil.WriteFile(*hostFile, fileContent, 0644); err != nil {
+		return err
+	}
+
+	fmt.Println(hostEntries)
+	return nil
+}
+
 func main() {
 	flag.Parse()
 
@@ -102,24 +125,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	block := []byte(fmt.Sprintf("%s\n%s\n%s\n", sectionStart, hostEntries, sectionEnd))
-
-	fileContent, err := ioutil.ReadFile(*hostFile)
-	if err != nil {
-		log.Fatalln(err.Error())
+	if err := tryWriteToHostFile(hostEntries); err != nil {
+		log.Fatalln(err)
 	}
-
-	re := regexp.MustCompile(fmt.Sprintf("(?ms)%s(.*)%s", sectionStart, sectionEnd))
-	if re.Match(fileContent) {
-		fileContent = re.ReplaceAll(fileContent, block)
-	} else {
-		fileContent = append(fileContent, block...)
-	}
-
-	if err := ioutil.WriteFile(*hostFile, fileContent, 0644); err != nil {
-		log.Fatalln(err.Error())
-	}
-
-	fmt.Println(hostEntries)
 
 }
