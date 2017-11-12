@@ -45,10 +45,7 @@ type Rule struct {
 	Service string
 }
 
-func (r *Rule) String() string {
-
-	return fmt.Sprintf("%s %s # %s", k8sHostname, r.Domain, r.Service)
-}
+func (r *Rule) String() string { return fmt.Sprintf("%s %s # %s", k8sHostname, r.Domain, r.Service) }
 
 type HostsList []Rule
 
