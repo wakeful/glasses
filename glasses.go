@@ -9,6 +9,8 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
+	"strings"
 
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -49,6 +51,12 @@ func (r *Rule) String() string {
 }
 
 type HostsList []Rule
+
+func (h HostsList) Len() int      { return len(h) }
+func (h HostsList) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h HostsList) Less(i, j int) bool {
+	return strings.ToLower(h[i].Domain) < strings.ToLower(h[j].Domain)
+}
 
 func k8sHost(config *rest.Config) string {
 	u, err := url.Parse(config.Host)
@@ -121,6 +129,8 @@ func main() {
 			}
 		}
 	}
+
+	sort.Sort(HostsList(entries))
 
 	var hostEntries string
 	for _, item := range entries {
