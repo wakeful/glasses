@@ -1,6 +1,6 @@
 # glasses
 
-see all the domains that [traefik](https://traefik.io/) is handling.
+see all the [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) resources from [k8s](https://kubernetes.io/).
 
 
 ## Installation 
@@ -23,15 +23,22 @@ Usage of glasses:
 dry-run mode:
 ```
 $ glasses
-# reading k8s config...
+# reading k8s ingress resource...
 192.168.99.100 grafana.local # sad-chicken-grafana
 192.168.99.100 prometheus.local # your-turkey-prometheus
 ```
 
-write mode:
+populate your `/etc/hosts` file:
 ```
 $ sudo -E glasses -write
-# reading k8s config...
+# reading k8s ingress resource...
 192.168.99.100 grafana.local # sad-chicken-grafana
 192.168.99.100 prometheus.local # your-turkey-prometheus
+
+$ cat /etc/hosts
+# generated using glasses start #
+192.168.99.100 grafana.local # sad-chicken-grafana
+192.168.99.100 prometheus.local # your-turkey-prometheus
+
+# generated using glasses end #
 ```

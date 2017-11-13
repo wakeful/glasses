@@ -20,7 +20,6 @@ import (
 
 var (
 	k8sHostname   string
-	matchPattern  = "map[kubernetes.io/ingress.class:traefik]"
 	hostFile      = flag.String("host-file", "/etc/hosts", "host file location")
 	writeHostFile = flag.Bool("write", false, "rewrite host file?")
 	showVersion   = flag.Bool("version", false, "show version and exit")
@@ -95,7 +94,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	fmt.Println("# reading k8s config...")
+	fmt.Println("# reading k8s ingress resource...")
 	config, err := clientcmd.BuildConfigFromFlags("", filepath.Join(homeDir(), ".kube", "config"))
 	if err != nil {
 		log.Fatalln(err.Error())
@@ -115,15 +114,11 @@ func main() {
 
 	var entries HostsList
 	for _, elem := range ingress.Items {
-		for _, annotation := range elem.Annotations {
-			if annotation == matchPattern {
-				for _, rule := range elem.Spec.Rules {
-					entries = append(entries, Rule{
-						Domain:  rule.Host,
-						Service: elem.Name,
-					})
-				}
-			}
+		for _, rule := range elem.Spec.Rules {
+			entries = append(entries, Rule{
+				Domain:  rule.Host,
+				Service: elem.Name,
+			})
 		}
 	}
 
