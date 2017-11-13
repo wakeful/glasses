@@ -20,6 +20,7 @@ import (
 
 var (
 	k8sHostname   string
+	version       = "dev"
 	hostFile      = flag.String("host-file", "/etc/hosts", "host file location")
 	writeHostFile = flag.Bool("write", false, "rewrite host file?")
 	showVersion   = flag.Bool("version", false, "show version and exit")
@@ -28,7 +29,6 @@ var (
 const (
 	sectionStart = "# generated using glasses start #"
 	sectionEnd   = "# generated using glasses end #\n"
-	version      = "0.1"
 )
 
 func homeDir() string {
