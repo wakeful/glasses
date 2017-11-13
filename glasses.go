@@ -28,7 +28,7 @@ var (
 
 const (
 	sectionStart = "# generated using glasses start #"
-	sectionEnd   = "# generated using glasses end #"
+	sectionEnd   = "# generated using glasses end #\n"
 	version      = "0.1"
 )
 
