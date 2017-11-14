@@ -1,0 +1,20 @@
+language: go
+go:
+- 1.9
+script: go vet
+before_deploy:
+  - ./build.sh
+deploy:
+  provider: releases
+  api_key:
+    secure: D07500Ew863vaLtLasgBOAa62BeuGyv8AdDWy6cJ64yetSMnly0x8ovczyD4Btz3WFLCiZAUh/fhf45/K8bT6qtvjZkxjq2FnvOH40LOj4FpSKy8SkIq1DXwJhfqjf/LYU8yx2QpkW2viPv0ZxrYR2bMe5Bkf5gLAcgD/YpF0kAFj/FTju1zTUWG3dx/4ptHJgkJ538xeJP2QRFuhvgp4ZUp2jJ2CY7ZgtZIdfFW339NoE90FLb7q+kOQl/OJsHgnypC+1cC993JgCIZe52ftg+JVpUxAzNy+BKSgcUHLxOn6xp9vzzG1IhwGlKHlmZhga1MhB+94jiudSMeOMxYVw/kHB5f8oFRi/3fjrRKh01zvBwsnRmo26RHMDOc7sgluZqQOBY9GTWXTIdMSGjtDin39Wi02XS+gjN8tbq3A9nJcn7zGi/b1ejX4W0ZbQIpxXjm6jmhOVntlA+BuUPj8mxMYh+FIXOSh9ZOh0JKHLCwvuctFDA4kNYsytM1Px0jEa5Hto04/FEVwkcJxNRejLG3SGnkMPXz4owHIb6iKayCqgMGCVKPkp2BeXc7+M8RcGool5OdrDrqVPlQl64beqShqvq6bJ6R+9luzPFiR/r7z/O4vgz8pWIF4VklqXeGADk+MKo/eZTuWVlC3lNb1vT/oLosKK5P6tsyhcIBdN0=
+  skip_cleanup: true
+  file:
+    - release/glasses-linux-amd64.sha256
+    - release/glasses-linux-amd64
+    - release/glasses-darwin-amd64.sha256
+    - release/glasses-darwin-amd64
+  on:
+    repo: wakeful/glasses
+    branch: master
+    tags: true
