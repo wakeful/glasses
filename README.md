@@ -45,13 +45,13 @@ populate your `/etc/hosts` file:
 ```
 $ sudo -E glasses -write
 # reading k8s ingress resource...
-192.168.99.100 grafana.local # sad-chicken-grafana
-192.168.99.100 prometheus.local # your-turkey-prometheus
+192.168.99.100 grafana.local     # sad-chicken-grafana
+192.168.99.100 prometheus.local  # your-turkey-prometheus
 
 $ cat /etc/hosts
 # generated using glasses start #
-192.168.99.100 grafana.local # sad-chicken-grafana
-192.168.99.100 prometheus.local # your-turkey-prometheus
+192.168.99.100 grafana.local     # sad-chicken-grafana
+192.168.99.100 prometheus.local  # your-turkey-prometheus
 
 # generated using glasses end #
 ```

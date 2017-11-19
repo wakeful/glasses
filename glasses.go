@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -11,6 +12,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"text/tabwriter"
 
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -44,7 +46,7 @@ type Rule struct {
 	Service string
 }
 
-func (r *Rule) String() string { return fmt.Sprintf("%s %s # %s", k8sHostname, r.Domain, r.Service) }
+func (r *Rule) String() string { return fmt.Sprintf("%s %s\t# %s", k8sHostname, r.Domain, r.Service) }
 
 type HostsList []Rule
 
@@ -129,12 +131,17 @@ func main() {
 		hostEntries = hostEntries + fmt.Sprintf("%s\n", item.String())
 	}
 
+	wBuffer := new(bytes.Buffer)
+	writer := tabwriter.NewWriter(wBuffer, 0, 0, 2, ' ', 0)
+	fmt.Fprint(writer, hostEntries)
+	writer.Flush()
+
 	if !*writeHostFile {
-		fmt.Println(hostEntries)
+		fmt.Println(wBuffer.String())
 		os.Exit(0)
 	}
 
-	if err := tryWriteToHostFile(hostEntries); err != nil {
+	if err := tryWriteToHostFile(wBuffer.String()); err != nil {
 		log.Fatalln(err)
 	}
 
