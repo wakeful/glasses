@@ -13,7 +13,7 @@ $ brew install glasses
 
 Linux
 ```
-curl -Lo glasses https://github.com/wakeful/glasses/releases/download/0.1.0/glasses-linux-amd64 && chmod +x glasses && sudo mv glasses /usr/local/bin/
+curl -Lo glasses https://github.com/wakeful/glasses/releases/download/0.2.0/glasses-linux-amd64 && chmod +x glasses && sudo mv glasses /usr/sbin/
 ```
 
 src
