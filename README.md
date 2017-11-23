@@ -37,8 +37,8 @@ dry-run mode:
 ```
 $ glasses
 # reading k8s ingress resource...
-192.168.99.100 grafana.local # sad-chicken-grafana
-192.168.99.100 prometheus.local # your-turkey-prometheus
+192.168.99.100 grafana.local     # sad-chicken-grafana
+192.168.99.100 prometheus.local  # your-turkey-prometheus
 ```
 
 populate your `/etc/hosts` file:
