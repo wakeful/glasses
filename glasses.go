@@ -22,6 +22,7 @@ import (
 
 var (
 	k8sHostname   string
+	versionUrl    = "https://github.com/wakeful/glasses"
 	version       = "dev"
 	hostFile      = flag.String("host-file", "/etc/hosts", "host file location")
 	writeHostFile = flag.Bool("write", false, "rewrite host file?")
@@ -92,7 +93,7 @@ func main() {
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Printf("Glasses version: %s", version)
+		fmt.Printf("Glasses\n url: %s\n version: %s", versionUrl, version)
 		os.Exit(2)
 	}
 
